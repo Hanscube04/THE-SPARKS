@@ -41,6 +41,7 @@ class ProductController
             'category_id'    => $_POST['category_id'],
             'product_name'   => $name,
             'description'    => trim($_POST['description'] ?? ''),
+            'specifications' => trim($_POST['specifications'] ?? ''),
             'price'          => $price,
             'stock_quantity' => $stock,
             'image_path'     => $imagePath,
@@ -54,6 +55,20 @@ class ProductController
     {
         Auth::requireRole(['admin', 'super_admin']);
 
+        $name  = trim($_POST['product_name'] ?? '');
+        $price = $_POST['price'] ?? 0;
+        $stock = $_POST['stock_quantity'] ?? 0;
+
+        $errors = [];
+        if (strlen($name) < 2) $errors[] = 'Product name is required.';
+        if (!is_numeric($price) || $price <= 0) $errors[] = 'Price must be a positive number.';
+        if (!is_numeric($stock) || $stock < 0) $errors[] = 'Stock quantity must be zero or more.';
+        if (empty($_POST['category_id'])) $errors[] = 'Please select a category.';
+
+        if (!empty($errors)) {
+            return ['success' => false, 'errors' => $errors];
+        }
+
         $imagePath = null;
         if (!empty($_FILES['image']['name'])) {
             $imagePath = $this->handleUpload($_FILES['image']);
@@ -61,10 +76,11 @@ class ProductController
 
         $ok = $this->productModel->update($productId, [
             'category_id'    => $_POST['category_id'],
-            'product_name'   => trim($_POST['product_name']),
+            'product_name'   => $name,
             'description'    => trim($_POST['description'] ?? ''),
-            'price'          => $_POST['price'],
-            'stock_quantity' => $_POST['stock_quantity'],
+            'specifications' => trim($_POST['specifications'] ?? ''),
+            'price'          => $price,
+            'stock_quantity' => $stock,
             'image_path'     => $imagePath,
         ]);
 

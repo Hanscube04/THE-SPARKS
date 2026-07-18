@@ -18,13 +18,14 @@ class Product
     public function create(array $data): int
     {
         $stmt = $this->db->prepare(
-            'INSERT INTO products (category_id, product_name, description, price, stock_quantity, image_path, added_by, status)
-             VALUES (?, ?, ?, ?, ?, ?, ?, "available")'
+            'INSERT INTO products (category_id, product_name, description, specifications, price, stock_quantity, image_path, added_by, status)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, "available")'
         );
         $stmt->execute([
             $data['category_id'],
             $data['product_name'],
             $data['description'],
+            $data['specifications'] ?? null,
             $data['price'],
             $data['stock_quantity'],
             $data['image_path'] ?? null,
@@ -36,13 +37,14 @@ class Product
     public function update(int $productId, array $data): bool
     {
         $stmt = $this->db->prepare(
-            'UPDATE products SET category_id = ?, product_name = ?, description = ?, price = ?, stock_quantity = ?, image_path = COALESCE(?, image_path)
+            'UPDATE products SET category_id = ?, product_name = ?, description = ?, specifications = ?, price = ?, stock_quantity = ?, image_path = COALESCE(?, image_path)
              WHERE product_id = ?'
         );
         return $stmt->execute([
             $data['category_id'],
             $data['product_name'],
             $data['description'],
+            $data['specifications'] ?? null,
             $data['price'],
             $data['stock_quantity'],
             $data['image_path'] ?? null,
