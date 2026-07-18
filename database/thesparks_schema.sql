@@ -56,6 +56,7 @@ CREATE TABLE products (
     category_id INT NOT NULL,
     product_name VARCHAR(150) NOT NULL,
     description TEXT,
+    specifications TEXT,
     price DECIMAL(12,2) NOT NULL,
     stock_quantity INT NOT NULL DEFAULT 0,
     image_path VARCHAR(255) DEFAULT NULL,

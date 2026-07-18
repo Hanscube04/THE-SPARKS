@@ -9,8 +9,8 @@
 require_once __DIR__ . '/../config/config.php';
 
 $fullName = 'System Super Admin';
-$email = 'Groly@gmail.com';
-$plainPassword = 'Ngeleja@12'; // change immediately after first login
+$email = 'admin@gmail.com';
+$plainPassword = 'Admin@12'; // change immediately after first login
 
 $db = Database::getInstance()->getConnection();
 $check = $db->prepare('SELECT admin_id FROM admins WHERE email = ?');
